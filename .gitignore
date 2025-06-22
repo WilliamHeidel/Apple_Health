@@ -1,0 +1,21 @@
+
+# Data
+*.duckdb
+*.json*
+*.log
+Test.txt
+*.csv
+*.parquet
+*.xlsx
+*.terraform/
+
+# Secrets
+/secrets/
+*.env
+*/.dlt/
+*.tfvars
+
+# dbt
+target/
+dbt_packages/
+logs/
