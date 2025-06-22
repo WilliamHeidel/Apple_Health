@@ -10,7 +10,6 @@ import gzip
 @dlt.transformer
 def read_json(items: Iterator[FileItemDict]) -> Iterator[TDataItems]:
     for file_obj in items:
-        print(file_obj)
         with file_obj.open() as f:
             yield json.load(f)
 
