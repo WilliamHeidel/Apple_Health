@@ -22,7 +22,7 @@ def read_json_gz(items: Iterator[FileItemDict]) -> Iterator[TDataItems]:
                 yield json.load(decompressed)
 
 
-files = filesystem(file_glob="**/*.json.gz") | read_json_gz() #| reformat
+files = filesystem(file_glob="**/*.json.gz") | read_json() #| reformat
 
 if __name__ == "__main__":
     pipeline = dlt.pipeline(
