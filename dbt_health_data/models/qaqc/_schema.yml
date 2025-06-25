@@ -55,3 +55,27 @@ models:
         description: The data source.
       - name: date
         description: The date of the metric.
+
+  - name: distinct_units_per_metric
+    description: Distinct units of measurement for each metric over all dates.
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: distinct_units
+        description: Count of distinct units for the metric.
+
+  - name: distinct_units_per_metric_more_than_one_unit
+    description: Subset of metrics that have more than one distinct unit.
+    tests:
+    - warn_if_nonempty:
+        config:
+          severity: error
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: distinct_units
+        description: Count of distinct units for the metric.
