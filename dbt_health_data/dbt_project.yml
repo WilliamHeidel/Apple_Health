@@ -33,7 +33,7 @@ models:
   dbt_health_data:
     # Config indicated by + and applies to all files under models/example/
     bronze:
-      +materialized: view
+      +materialized: table
       +schema: apple_health_bronze
     silver:
       +materialized: view

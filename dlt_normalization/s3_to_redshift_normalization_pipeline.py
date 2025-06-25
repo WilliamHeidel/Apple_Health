@@ -31,6 +31,7 @@ if __name__ == "__main__":
         staging="filesystem",
         destination="redshift",
         dataset_name="apple_health",
+        progress='enlighten',
     )
     info = pipeline.run(files, refresh='drop_sources')
     print(info)

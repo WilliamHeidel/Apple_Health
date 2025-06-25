@@ -11,3 +11,4 @@ pipdeptree==2.9.6
 psycopg2-binary==2.9.10
 tomli==2.0.1
 wheel==0.45.1
+enlighten==1.14.1
