@@ -1,0 +1,44 @@
+
+name: Run dbt on Push
+
+on:
+  workflow_dispatch: null
+  workflow_run:
+    workflows: ["Run DLT Pipeline"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set environment variables
+        run: |
+          echo "REDSHIFT_USER=${{ secrets.REDSHIFT_USER }}" >> $GITHUB_ENV
+          echo "REDSHIFT_PASS=${{ secrets.DESTINATION__REDSHIFT__CREDENTIALS__PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Set DBT_PROFILES_DIR
+        run: echo "DBT_PROFILES_DIR=$(pwd)/.dbt" >> $GITHUB_ENV
+
+      - name: Run dbt
+        run: |
+          dbt debug
+          dbt deps
+          dbt build
+          dbt build --target prod
+        working-directory: ${{ github.workspace }}/dbt_health_data

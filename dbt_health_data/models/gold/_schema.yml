@@ -1,0 +1,12 @@
+
+version: 2
+
+models:
+  - name: gold_health_data
+    description: "The gold model for Apple Health Data export from HealthKit."
+    # columns:
+    #   - name: id
+    #     description: "The primary key for this table"
+    #     tests:
+    #       - unique
+    #       - not_null

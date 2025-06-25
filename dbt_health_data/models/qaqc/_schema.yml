@@ -1,0 +1,57 @@
+
+version: 2
+
+models:
+  - name: distinct_metrics_by_date
+    description: Daily breakdown of distinct metrics.
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: source
+        description: The data source.
+
+  - name: distinct_metrics_overall
+    description: Distinct metrics aggregated over all dates.
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: source
+        description: The data source.
+      - name: distinct_sources
+        description: Count of distinct sources for the metric.
+
+  - name: distinct_metrics_overall_more_than_one_source
+    description: Subset of metrics that have more than one distinct source.
+    tests:
+      - warn_if_nonempty:
+          config:
+            severity: warn
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: source
+        description: The data source.
+      - name: distinct_sources
+        description: Count of distinct sources for the metric.
+
+  - name: distinct_metrics_by_date_more_than_one_source
+    description: Daily breakdown of metrics with more than one source.
+    tests:
+    - warn_if_nonempty:
+        config:
+          severity: warn
+    columns:
+      - name: name
+        description: The metric name.
+      - name: units
+        description: The unit of measurement.
+      - name: source
+        description: The data source.
+      - name: date
+        description: The date of the metric.

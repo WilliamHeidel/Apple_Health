@@ -1,0 +1,6 @@
+
+version: 2
+
+models:
+  - name: silver_health_data
+    description: "The silver model for Apple Health Data export from HealthKit."

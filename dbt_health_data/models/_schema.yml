@@ -1,0 +1,29 @@
+
+
+version: 2
+
+sources:
+  - name: apple_health
+    schema: apple_health
+    tables:
+    - name: read_json
+      description: "Top level Apple HealthKit export (source_file)."
+      columns:
+        - name: source_file
+          description: "The source file name (in S3 bucket) for the Apple HealthKit export."
+    - name: read_json__data__metrics
+      description: "Second level Apple HealthKit export (units & name)."
+      columns:
+        - name: units
+          description: "The units of the metric (e.g., 'count', 'kcal')."
+        - name: name
+          description: "The name of the metric (e.g., 'step_count', 'active_energy')."
+    - name: read_json__data__metrics__data
+      description: "Third level Apple HealthKit export (date, qty, source, aggregates)."
+      columns:
+        - name: date
+          description: "The date of the metric data (UTC offset)."
+        - name: qty
+          description: "The quantity of the metric data (float)."
+        - name: source
+          description: "The source of the metric data (e.g., 'Billy's iPhone', 'Connect')."
