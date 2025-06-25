@@ -32,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r dlt_normalization/requirements_dlt.txt
 
       - name: Run DLT Pipeline
         run: python dlt_normalization/s3_to_redshift_normalization_pipeline.py
