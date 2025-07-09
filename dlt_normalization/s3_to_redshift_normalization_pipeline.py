@@ -33,5 +33,5 @@ if __name__ == "__main__":
         dataset_name="apple_health",
         progress='enlighten',
     )
-    info = pipeline.run(files, refresh='drop_sources')
+    info = pipeline.run(files, refresh='drop_sources', loader_file_format="parquet")
     print(info)

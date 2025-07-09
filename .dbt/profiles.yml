@@ -4,7 +4,7 @@ redshift:
   outputs:
     test:
       type: redshift
-      host: redshift-cluster-test.cnfb7cenlrg6.us-east-2.redshift.amazonaws.com
+      host: redshift-serverless.804373361546.us-east-2.redshift-serverless.amazonaws.com
       port: 5439
       user: "{{ env_var('REDSHIFT_USER') }}"
       pass: "{{ env_var('REDSHIFT_PASS') }}"
@@ -17,7 +17,7 @@ redshift:
 
     prod:
       type: redshift
-      host: redshift-cluster-test.cnfb7cenlrg6.us-east-2.redshift.amazonaws.com
+      host: redshift-serverless.804373361546.us-east-2.redshift-serverless.amazonaws.com
       port: 5439
       user: "{{ env_var('REDSHIFT_USER') }}"
       pass: "{{ env_var('REDSHIFT_PASS') }}"

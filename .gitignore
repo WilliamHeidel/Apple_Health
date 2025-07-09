@@ -19,3 +19,7 @@ Test.txt
 target/
 dbt_packages/
 logs/
+
+# Extras
+.DS_Store
+*.pyc
