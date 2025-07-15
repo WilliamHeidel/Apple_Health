@@ -14,3 +14,4 @@ wheel==0.45.1
 enlighten==1.14.1
 ijson==3.4.0
 wearipedia==0.1.7
+boto3==1.38.43 
