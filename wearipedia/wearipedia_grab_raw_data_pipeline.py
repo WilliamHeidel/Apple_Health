@@ -9,10 +9,12 @@ import gzip
 import os
 import json
 import re
+import math
 
-load_dotenv('.env/.env')
+load_dotenv('../.env/.env')
 BUCKET_NAME = os.environ.get("WEARIPEDIA_S3_BUCKET_NAME")
-PREFIX = "wearipedia/cronometer/"
+PREFIX = "wearipedia/raw/cronometer/"
+BACKFILL = False
 email_address = os.getenv(f'CRONOMETER_EMAIL')
 password = os.getenv(f'CRONOMETER_PASSWORD')
 
@@ -68,13 +70,23 @@ def get_missing_dates(start_date: str, end_date: str, existing_dates: list[str])
     missing = sorted(all_dates - existing)
     return missing
 
+def sanitize_nan(obj):
+    if isinstance(obj, float) and math.isnan(obj):
+        return None
+    elif isinstance(obj, dict):
+        return {k: sanitize_nan(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [sanitize_nan(i) for i in obj]
+    return obj
+
 def upload_dicts_as_gzipped_jsonl_to_s3(records: list[dict], data_type: str, end_date: str, bucket: str, prefix: str, region: str = "us-east-2"):
     buffer = io.BytesIO()
 
     # Write DataFrame to GZIP CSV in memory
     with gzip.GzipFile(fileobj=buffer, mode="w") as gz:
         for item in records:
-            line = json.dumps(item) + "\n"
+            sanitized = sanitize_nan(item)
+            line = json.dumps(sanitized) + "\n"
             gz.write(line.encode('utf-8'))
 
     buffer.seek(0)
@@ -96,10 +108,18 @@ if __name__ == "__main__":
     missing_dates = get_missing_dates(start_date, end_date, existing_dates)
 
     for date in missing_dates:
-        params = {"start_date": date, "end_date": date}
+        if BACKFILL:
+            params = {"start_date": start_date, "end_date": end_date}
+            date = end_date
+        else:
+            params = {"start_date": date, "end_date": date}
         datasets = ['dailySummary', 'servings', 'exercises', 'biometrics']
         for dataset in datasets:
-            data = device.get_data("dailySummary", params=params)
+            try:
+                data = device.get_data(dataset, params=params)
+            except:
+                continue
+
             upload_dicts_as_gzipped_jsonl_to_s3(
                 data,
                 data_type=dataset,
@@ -107,4 +127,7 @@ if __name__ == "__main__":
                 bucket=BUCKET_NAME,
                 prefix=PREFIX
             )
+            
+        if BACKFILL:
+            break
     print(f"Missing dates processed: {missing_dates}")
